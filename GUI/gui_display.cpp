@@ -29,8 +29,12 @@ void display(void){ //main display loop
      draw_target();
 
 
-    if(mode==0)
+    if(mode==0){
    drawCameraFrustum(&cs,active_camera);
+
+  //drawCameraFrustum(&cs,active_camera+1);
+     drawIntersections(&cs);
+    }
 
 
     glutSwapBuffers();
