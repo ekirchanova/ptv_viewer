@@ -59,6 +59,7 @@ typedef struct{
     cv::Mat cameraMatrix;
     cv::Mat distCoeffs;
     std::vector<std::vector<cv::Point2f> > imagePoints;
+    std::vector<std::vector<cv::Point2f> > undistortImagePoints;
     std::vector<std::vector<cv::Point3f> > objectPoints;
     std::vector<cv::Mat> images;
     OpenGLMatrix projM;

@@ -1,7 +1,7 @@
 #include "GUI.h"
 #include <stdlib.h>
 #include <stdio.h>
-
+#include <iostream>
 
 void gL4x4MatrixInverse(OpenGLMatrix *M, OpenGLMatrix *Inv){
     double  det;
@@ -231,7 +231,6 @@ void drawCameraFrustum(camera_sequence *c, int active_image){
     glColor3f(1.0,1.0,1.0);
 
 
-
     glBegin(GL_QUADS);
      glTexCoord2f(0.0f, 0.0f); glVertex3f(zFar_w.m[0], zFar_w.m[1], zFar_w.m[2]);    // Низ лево
      glTexCoord2f(1.0f, 0.0f); glVertex3f(zFar_w.m[4], zFar_w.m[5], zFar_w.m[6]);    // Низ право
@@ -241,6 +240,11 @@ void drawCameraFrustum(camera_sequence *c, int active_image){
 
 
     glDisable(GL_TEXTURE_2D);
+
+    /*draw_points(c->imagePoints[active_image], 0.0, 1.0, 0.0, 0.0);
+    printf("found %d points\n",c->imagePoints[active_image].size());
+    draw_points(c-> undistortImagePoints[active_image], 0.0, 0.0, 1.0, 0.0);
+    printf("found %d points\n",c->imagePoints[active_image].size());*/
 
     glBegin(GL_LINES);
     glColor3f(0.0,0.5,0.0);

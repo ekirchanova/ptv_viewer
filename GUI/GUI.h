@@ -83,4 +83,6 @@ void drawCameraFrustum(camera_sequence *c, int active_image);
 void draw_target();
 void draw_origin(double s);
 
+void draw_points(const std::vector<cv::Point2f>& points, double z, GLdouble red, GLdouble green, GLdouble blue);
+
 #endif

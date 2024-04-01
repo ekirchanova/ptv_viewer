@@ -26,7 +26,7 @@ void display(void){ //main display loop
     glEnd();
 
      draw_origin(0.1);
-     draw_target();
+     //draw_target();
 
 
     if(mode==0)

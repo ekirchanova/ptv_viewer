@@ -10,7 +10,7 @@ double w_x1=1.3;
 double w_y0=-1.3;
 double w_y1=1.3;
 
-void GUI_init(int argc, char **argv){  //window initialization
+void   GUI_init(int argc, char **argv){  //window initialization
     //test directory
     printf("GUI dir = %s \n", dir);
     glutInit(&argc,argv);
@@ -59,6 +59,11 @@ void GUI_init(int argc, char **argv){  //window initialization
 loadTextureToVideoMemory(&(cs));
 
     try_calibration(&(cs));
+    for (int i=0;i<7;i++){
+
+        undistortPoints(i,&(cs));
+
+     }
     glEnable(GL_TEXTURE);
     glEnable(GL_DEPTH_TEST);
     glShadeModel(GL_SMOOTH);

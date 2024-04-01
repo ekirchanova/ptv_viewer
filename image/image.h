@@ -15,6 +15,6 @@ void convertOpenCVModelViewMatrixToOpenGL(cv::Mat rvec, cv::Mat tvec, GLdouble* 
 
 
 void convertOpenCVProjectionMatrixToOpenGL(cv::Mat cameraMatrix, double zN,double zF,GLdouble* GLProjM);
-
+void undistortPoints(size_t numberImage, camera_sequence *c);
 
 #endif

@@ -105,6 +105,18 @@ void convertOpenCVProjectionMatrixToOpenGL(cv::Mat cameraMatrix, double zN,doubl
     GLProjM[2] = 0.0;     GLProjM[6] = 0.0;     GLProjM[10] = -(zF+zN)/(zF-zN); GLProjM[14] = -2.0*(zF*zN)/(zF-zN);
     GLProjM[3] = 0.0;     GLProjM[7] = 0.0;     GLProjM[11] = -1.0; GLProjM[15] = 0.0;
 }
+
+void undistortPoints(size_t numberImage, camera_sequence *c)
+{
+    using namespace cv;
+    using namespace std;
+
+    vector<Point2f> pointbuf;
+    undistortPoints(c->imagePoints[numberImage], pointbuf, c->cameraMatrix, c->distCoeffs);
+    c->undistortImagePoints.push_back(pointbuf);
+    printf("found %d points\n",pointbuf.size());
+}
+
 /*
 int loadBmpImage( const char * fileName, camera_sequence *c)
 {

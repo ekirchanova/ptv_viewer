@@ -216,3 +216,21 @@ void draw_origin(double s){
     glVertex3f(0., 0., s);
     glEnd();
 }
+
+
+void draw_points(const std::vector<cv::Point2f>& points, double z, GLdouble red, GLdouble green, GLdouble blue)
+{
+    size_t size = points.size();
+
+    printf("found %d points\n",size);
+    glPointSize(5);
+    glBegin(GL_POINTS);
+    glColor3d(red,green,blue);
+    for(size_t i = 0; i < size; ++i)
+    {
+        glVertex3d(points[i].x, points[i].y, z);
+        printf("points %i x : %f y :%d\n", i, points[i].x, points[i].y );
+
+    }
+    glEnd();
+}
