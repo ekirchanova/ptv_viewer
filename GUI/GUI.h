@@ -78,7 +78,7 @@ void display(void); //main dispaly redraw event
 
 void gL4x4MatrixInverse(OpenGLMatrix *M, OpenGLMatrix *Inv);
 void drawCameraFrustum(camera_sequence *c, int active_image);
-
+void drawIntersections(camera_sequence *c);
 
 void draw_target();
 void draw_origin(double s);

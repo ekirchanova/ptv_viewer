@@ -31,7 +31,66 @@ int prepareCalibImageCV(const char * fileName, camera_sequence *c){
 
 
     c->images.push_back(image);
+    /*for (int i=0; i<pointbuf.size(); i++){
+        printf("point %d x=%f y=%f \n",i,pointbuf[i].x,pointbuf[i].y);
+        c->centers[i][0]=pointbuf[i].x*1.0/c->w;
+        c->centers[i][1]=1.0 - pointbuf[i].y*1.0/c->h;
+        c->centers[i][2]=0.0;
+    }
+    c->centers_size = pointbuf.size();
 
+    /*
+    //filling c TODO pixel format conversion
+    c->h = image.size().height;
+    c->w = image.size().width;
+    int totalSize = c->h*c->w*3;
+    c->data=(byte*)realloc((void*)(c->data), totalSize);
+    printf("realloc done h=%d w=%d \n",c->h,c->w);
+    //  memcpy((void*)(c.data),(void*)(pixels),totalSize);
+
+
+    int index=0;
+    for(int j = 0; j < c->h ; ++j)
+        for(int i = 0; i < c->w ; ++i){
+
+            unsigned char B,R,G;
+            B = image.at<unsigned char>(c->h-1-j,i);
+            G = image.at<unsigned char>(c->h-1-j,i);
+            R = image.at<unsigned char>(c->h-1-j,i);
+
+            c->data[index] = R;
+            c->data[index+1] = G;
+            c->data[index+2] = B;
+            index+=3;
+        }*/
+    //contours
+
+
+
+    /*
+    Mat res(image.size(), CV_8UC1);
+    Canny(image, res, 100 , 200, 3);
+
+    vector<vector<Point> > contours;
+    vector<Vec4i> hierarchy;
+     findContours(res, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE); // Find contours with hierarchy
+
+    vector<Moments> mu_tbl(contours.size());
+    vector<Point2f> mc_tbl(contours.size());
+    int num=0;
+    for( int i = 0; i < contours.size(); i++ )
+    {	mu_tbl[i] = moments( contours[i], false );
+        //mc_tbl[i] = Point2f( mu_tbl[i].m10/mu_tbl[i].m00 , mu_tbl[i].m01/mu_tbl[i].m00 );
+        //  printf("cont %d: rad=%f size=%d\n",i, mu_tbl[i].m00,contours[i].size());
+        for( int j = 0; j < contours[i].size(); j++ ){
+            //  printf("%d %f %f \n",num,contours[i][j].x*1.0/c->w,1.0 - contours[i][j].y*1.0/c->h);
+            c->points[num][0] = contours[i][j].x*1.0/c->w;
+            c->points[num][1] = 1.0 - contours[i][j].y*1.0/c->h;
+            c->points[num][2] = 0.0;
+            if(num <100000)num++;
+        }
+    }
+    c->pointSize = num;*/
     return 1;
 }
 
@@ -47,9 +106,20 @@ void try_calibration(camera_sequence *c){
     printf("mat:\n %f %f %f \n %f %f %f \n %f %f %f\n",c->cameraMatrix.at<double>(0,0),c->cameraMatrix.at<double>(0,1),c->cameraMatrix.at<double>(0,2),
            c->cameraMatrix.at<double>(1,0),c->cameraMatrix.at<double>(1,1),c->cameraMatrix.at<double>(1,2),
            c->cameraMatrix.at<double>(2,0),c->cameraMatrix.at<double>(2,1),c->cameraMatrix.at<double>(2,2));
+   /*
+    c_[0].rvects.clear();
+    c_[0].tvects.clear();
+
+    for (int i=0; i<rvecs.size(); ++i){
+        c_[0].rvects.push_back(rvecs[i]);
+        c_[0].tvects.push_back(tvecs[i]);
+    }
+    c_[0].cameraMatrix = cameraMatrix;
+    c_[0].distCoeffs = distCoeffs;*/
+
 
     OpenGLMatrix modelv;
-    convertOpenCVProjectionMatrixToOpenGL(c->cameraMatrix,0.1,3,c->projM.m);
+    convertOpenCVProjectionMatrixToOpenGL(c->cameraMatrix,0.1,1.5,c->projM.m);
     for (int i=0;i<c->rvects.size(); ++i){
     convertOpenCVModelViewMatrixToOpenGL(c->rvects[i],c->tvects[i],modelv.m);
     c->modelvMatrices.push_back(modelv);

@@ -191,8 +191,9 @@ void draw_target(){
     glColor3f(1.0,0.0,0.0);
     for (int i=0; i < ni; ++i)
         for (int j=0; j < nj; ++j){
-            glBegin(GL_TRIANGLE_FAN);
-                    glVertex3f(dr*(i - (ni-1)*0.5) , dr*(j - (nj-1)*0.5) , 0.0);
+            //glBegin(GL_TRIANGLE_FAN);
+            glBegin(GL_LINE_LOOP);
+                    //glVertex3f(dr*(i - (ni-1)*0.5) , dr*(j - (nj-1)*0.5) , 0.0);
             for (int n=0; n <= n_phi ; ++n){
                 if (!(i == (ni-1)/2 && j == (nj-1)/2))
                     glVertex3f(dr*(i - (ni-1)*0.5) + r0*cos(n*2.0*M_PI/n_phi), dr*(j - (nj-1)*0.5) + r0*sin(n*2.0*M_PI/n_phi), 0.0);
