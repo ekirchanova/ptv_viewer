@@ -31,11 +31,9 @@ typedef struct
     float dx;
 }color_table;
 
-typedef struct{
-        double x,y,z;
-}VEC3;
 
-
+extern double tres;
+extern int counter;
 extern int active_camera;
 extern char dir[1024];
 
@@ -61,6 +59,9 @@ extern float sc;
 extern GLuint textures[1024];
 extern camera_sequence cs;
 
+extern std::vector<VEC3> tracers;
+extern std::vector<VEC3> vort;
+
 extern int mode;
 void loadTextureToVideoMemory(camera_sequence *c);
 int loadBmpImage(const char * fileName, camera_sequence *c);
@@ -82,5 +83,6 @@ void drawIntersections(camera_sequence *c);
 
 void draw_target();
 void draw_origin(double s);
-
+void draw_tracers(std::vector<VEC3> & tracers,double rad,int n_rad,int n_phi);
+void evolve_tracers(std::vector<VEC3> & vortex, std::vector<VEC3> & tracers, double dt);
 #endif

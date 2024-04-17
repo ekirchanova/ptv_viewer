@@ -9,6 +9,8 @@ double w_x1=1.3;
 
 double w_y0=-1.3;
 double w_y1=1.3;
+std::vector<VEC3> tracers;
+std::vector<VEC3> vort;
 
 void GUI_init(int argc, char **argv){  //window initialization
     //test directory
@@ -43,7 +45,6 @@ void GUI_init(int argc, char **argv){  //window initialization
     sprintf(fname[6],"%s/test_out/6.bmp",dir);
     sprintf(fname[7],"%s/test_out/7.bmp",dir);
 
-  //  cs.data = NULL; //do not forget this!
     cs.dz = 1.0;
     cs.fov =0.45;
 
@@ -51,12 +52,12 @@ void GUI_init(int argc, char **argv){  //window initialization
     cs.u[0] = 0.0; cs.u[1] = 1.0; cs.u[2] = 0.0;
     cs.r[0] = 1.0; cs.r[1] = 0.0; cs.r[2] = 0.0;
 
-    for (int i=0;i<7;i++){
+    for (int i=0;i<1;i++){
 
     prepareCalibImageCV(fname[i],&(cs));
 
      }
-loadTextureToVideoMemory(&(cs));
+    loadTextureToVideoMemory(&(cs));
 
     try_calibration(&(cs));
     glEnable(GL_TEXTURE);
@@ -70,12 +71,33 @@ loadTextureToVideoMemory(&(cs));
     glMatrixMode (GL_MODELVIEW);
 
 
+    double r_max=0.5;
+    for (int i=0; i<500; i++)
+    {
+        VEC3 tracer;
+        tracer.x = (2.0*(rand()*1.0/RAND_MAX) - 1.0)*r_max;
+        tracer.y = (2.0*(rand()*1.0/RAND_MAX) - 1.0)*r_max;
+        tracer.z = (2.0*(rand()*1.0/RAND_MAX) - 1.0)*r_max;
+        tracers.push_back(tracer);
+    }
+
+    int n_vort =20;
+    double r_vort =0.5;
+    for (int i=0; i<n_vort; i++)
+    {
+        VEC3 tracer;
+        tracer.x = 0.5;
+        tracer.y = r_vort * sin(2*i*M_PI/(n_vort-1));
+        tracer.z = r_vort * cos(2*i*M_PI/(n_vort-1));
+        vort.push_back(tracer);
+    }
+
     glutMainLoop();
 }
 
 void resize(int w, int h){ //on resize event
     glViewport(0, 0, w, h);
-    glClearColor (0.0, 0.0, 0.0, 0.0);
+    glClearColor (1.0, 1.0, 1.0, 0.0);
     glColor3f(1.0, 1.0, 1.0);
     glMatrixMode (GL_PROJECTION);
     glLoadIdentity ();

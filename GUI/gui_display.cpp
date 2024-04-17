@@ -2,6 +2,7 @@
 
 int redr = 0; //for automatic redrawing
 int active_camera =0;
+
 void display(void){ //main display loop
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
@@ -26,14 +27,16 @@ void display(void){ //main display loop
     glEnd();
 
      draw_origin(0.1);
-     draw_target();
+    // draw_target();
+
 
 
     if(mode==0){
-   drawCameraFrustum(&cs,active_camera);
+  // drawCameraFrustum(&cs,active_camera);
 
   //drawCameraFrustum(&cs,active_camera+1);
-     drawIntersections(&cs);
+   //  drawIntersections(&cs);
+        draw_tracers(tracers,0.01,5,20);
     }
 
 

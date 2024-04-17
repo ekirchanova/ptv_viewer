@@ -37,6 +37,10 @@
 #include <opencv2/core/mat.hpp>
 
 typedef struct{
+        double x,y,z;
+}VEC3;
+
+typedef struct{
     GLdouble m[16];
 }OpenGLMatrix;
 

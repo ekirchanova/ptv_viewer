@@ -21,7 +21,8 @@ SOURCES += \
     IO/IO_tga.cpp \
     IO/IO_vtk.cpp \
     image/image_opencv.cpp \
-    Main.cpp
+    Main.cpp \
+    GUI/gui_tracers.cpp
 
 
 

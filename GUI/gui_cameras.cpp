@@ -246,7 +246,7 @@ void drawCameraFrustum(camera_sequence *c, int active_image){
         zFar_w.m[i*4+3] = 1.0;
     }
     glLineWidth(2.0);
-    glBegin(GL_LINE_LOOP);
+   /* glBegin(GL_LINE_LOOP);
     glColor3f(0.0,0.5,0.0);
     glVertex3f(zNear_w.m[0], zNear_w.m[1], zNear_w.m[2]);
     glVertex3f(zNear_w.m[4], zNear_w.m[5], zNear_w.m[6]);
@@ -260,7 +260,7 @@ void drawCameraFrustum(camera_sequence *c, int active_image){
     glVertex3f(zFar_w.m[4], zFar_w.m[5], zFar_w.m[6]);
     glVertex3f(zFar_w.m[8], zFar_w.m[9], zFar_w.m[10]);
     glVertex3f(zFar_w.m[12],zFar_w.m[13],zFar_w.m[14]);
-    glEnd();
+    glEnd();*/
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, c->texture_indices[active_image]);
@@ -278,7 +278,7 @@ void drawCameraFrustum(camera_sequence *c, int active_image){
 
     glDisable(GL_TEXTURE_2D);
 
-    glBegin(GL_LINES);
+   /* glBegin(GL_LINES);
     glColor3f(0.0,0.5,0.0);
     glVertex3f(zNear_w.m[0], zNear_w.m[1], zNear_w.m[2]);
     glVertex3f(zFar_w.m[0], zFar_w.m[1], zFar_w.m[2]);
@@ -291,18 +291,18 @@ void drawCameraFrustum(camera_sequence *c, int active_image){
 
     glVertex3f(zNear_w.m[12],zNear_w.m[13],zNear_w.m[14]);
     glVertex3f(zFar_w.m[12],zFar_w.m[13],zFar_w.m[14]);
-    glEnd();
+    glEnd();*/
 
     glLineWidth(1.0);
     if (active_image==0)
-        glColor3f(0,0,1);
+        glColor3f(0,1,0);
     else
         glColor3f(1,1,1);
 
     glPointSize(4);
     glDisable(GL_DEPTH_TEST);
     glBegin(GL_LINES);
-    for (int i=0; i<c->imagePoints[active_image].size();i+=4){
+    for (int i=counter; i<c->imagePoints[active_image].size();i+=19){
         double a,b,dx0[3],dy0[3],dx1[3],dy1[3],x0[3],x1[3];
         a=c->imagePoints[active_image][i].x*1.0/c->images[active_image].size().width;
         b=1.0-(c->imagePoints[active_image][i].y*1.0/c->images[active_image].size().height);
@@ -347,7 +347,14 @@ void drawCameraFrustum(camera_sequence *c, int active_image){
 }
 
 
-void drawIntersections(camera_sequence *c){
+void drawIntersections_min(camera_sequence *c){
+
+    std::vector<VEC3> points;
+    std::vector<VEC3> p0_0;
+    std::vector<VEC3> p0_1;
+
+    std::vector<VEC3> p1_0;
+    std::vector<VEC3> p1_1;
 
     OpenGLMatrix M,InvM, zNear, zFar,zNear_w[2],zFar_w[2];
 
@@ -379,11 +386,11 @@ void drawIntersections(camera_sequence *c){
         }
     }
     glDisable(GL_DEPTH_TEST);
-    glPointSize(4);
-    glBegin(GL_POINTS);
 
-    glColor3f(0,0,1);
-    for (int nn=0; nn<c->imagePoints[0].size();nn+=4){
+
+    VEC3 p_min_0_0, p_min_1_0,p_min_0_1,p_min_1_1;
+
+    for (int nn=counter; nn<c->imagePoints[0].size();nn+=19){
         double a,b,dx0[3],dy0[3],dx1[3],dy1[3],x0[3],x1[3];
         a=c->imagePoints[0][nn].x*1.0/c->images[0].size().width;
         b=1.0-(c->imagePoints[0][nn].y*1.0/c->images[0].size().height);
@@ -417,7 +424,7 @@ void drawIntersections(camera_sequence *c){
         double l2_min = 1e10;
         double nearest[3];
 
-        for (int i=0; i<c->imagePoints[1].size();i+=4){
+        for (int i=0; i<c->imagePoints[1].size();i+=1){
             a=c->imagePoints[1][i].x*1.0/c->images[1].size().width;
             b=1.0-(c->imagePoints[1][i].y*1.0/c->images[1].size().height);
             dx1[0] = zFar_w[1].m[4] - zFar_w[1].m[0];
@@ -454,12 +461,226 @@ void drawIntersections(camera_sequence *c){
                 nearest[0] = ne[0];
                 nearest[1] = ne[1];
                 nearest[2] = ne[2];
+                p_min_0_0.x=l1_p0[0];
+                p_min_0_0.y=l1_p0[1];
+                p_min_0_0.z=l1_p0[2];
+
+                p_min_0_1.x=l1_p1[0];
+                p_min_0_1.y=l1_p1[1];
+                p_min_0_1.z=l1_p1[2];
+
+                p_min_1_0.x=l2_p0[0];
+                p_min_1_0.y=l2_p0[1];
+                p_min_1_0.z=l2_p0[2];
+
+                p_min_1_1.x=l2_p1[0];
+                p_min_1_1.y=l2_p1[1];
+                p_min_1_1.z=l2_p1[2];
             }
 
         }
-        glVertex3f(nearest[0],nearest[1],nearest[2]);
+        VEC3 pp;
+        pp.x = nearest[0];
+        pp.y = nearest[1];
+        pp.z = nearest[2];
+        points.push_back(pp);
+        p0_0.push_back(p_min_0_0);
+        p0_1.push_back(p_min_0_1);
+
+        p1_0.push_back(p_min_1_0);
+        p1_1.push_back(p_min_1_1);
+    }
+
+     glPointSize(7);
+    glColor3f(1,0,1);
+    glBegin(GL_POINTS);
+    for (int i=0; i<points.size(); ++i)
+    glVertex3f(points[i].x,points[i].y,points[i].z);
+    glEnd();
+
+    glBegin(GL_LINES);
+    for (int i=0; i<points.size(); ++i){
+        glColor3f(0,0.5,0);
+    glVertex3f(p0_0[i].x, p0_0[i].y, p0_0[i].z);
+    glVertex3f(p0_1[i].x, p0_1[i].y, p0_1[i].z);
+    glColor3f(0.5,0.5,0.5);
+    glVertex3f(p1_0[i].x, p1_0[i].y, p1_0[i].z);
+    glVertex3f(p1_1[i].x, p1_1[i].y, p1_1[i].z);
     }
     glEnd();
+
+    glEnable(GL_DEPTH_TEST);
+
+
+}
+
+
+
+void drawIntersections(camera_sequence *c){
+
+    std::vector<VEC3> points;
+    std::vector<VEC3> p0_0;
+    std::vector<VEC3> p0_1;
+
+    std::vector<VEC3> p1_0;
+    std::vector<VEC3> p1_1;
+
+    OpenGLMatrix M,InvM, zNear, zFar,zNear_w[2],zFar_w[2];
+
+
+    for (int nn = 0; nn<2; ++nn){
+        gL4x4MatrixMult(&(c->projM),&(c->modelvMatrices[nn]),&M);
+        gL4x4MatrixInverse(&M,&InvM);
+
+        zNear.m[0] = -1.0; zNear.m[4] =  1.0; zNear.m[8]  =  1.0;  zNear.m[12] = -1.0;  //x
+        zNear.m[1] = -1.0; zNear.m[5] = -1.0; zNear.m[9]  =  1.0;  zNear.m[13] =  1.0;  //y
+        zNear.m[2] = -1.0; zNear.m[6] = -1.0; zNear.m[10] = -1.0;  zNear.m[14] = -1.0;  //z
+        zNear.m[3] =  1.0; zNear.m[7] =  1.0; zNear.m[11] =  1.0;  zNear.m[15] =  1.0;  //w
+
+        zFar.m[0] = -1.0; zFar.m[4] =  1.0; zFar.m[8]  =  1.0;  zFar.m[12] = -1.0;  //x
+        zFar.m[1] = -1.0; zFar.m[5] = -1.0; zFar.m[9]  =  1.0;  zFar.m[13] =  1.0;  //y
+        zFar.m[2] =  1.0; zFar.m[6] =  1.0; zFar.m[10] =  1.0;  zFar.m[14] =  1.0;  //z
+        zFar.m[7] =  1.0; zFar.m[3] =  1.0; zFar.m[11] =  1.0;  zFar.m[15] =  1.0;  //w
+
+        gL4x4MatrixMult(&InvM,&zNear,&(zNear_w[nn]));
+        gL4x4MatrixMult(&InvM,&zFar,&(zFar_w[nn]));
+
+        //dividing by weight
+        for (int i=0;i<4;i++){
+            for (int j=0;j<3;j++){
+                zNear_w[nn].m[i*4+j] = zNear_w[nn].m[i*4+j]/zNear_w[nn].m[i*4+3];
+                zFar_w[nn].m[i*4+j] = zFar_w[nn].m[i*4+j]/zFar_w[nn].m[i*4+3];
+            }
+            zNear_w[nn].m[i*4+3] = 1.0;
+            zFar_w[nn].m[i*4+3] = 1.0;
+        }
+    }
+    glDisable(GL_DEPTH_TEST);
+
+
+    VEC3 p_min_0_0, p_min_1_0,p_min_0_1,p_min_1_1;
+
+    for (int nn=counter; nn<c->imagePoints[0].size();nn+=19){
+        double a,b,dx0[3],dy0[3],dx1[3],dy1[3],x0[3],x1[3];
+        a=c->imagePoints[0][nn].x*1.0/c->images[0].size().width;
+        b=1.0-(c->imagePoints[0][nn].y*1.0/c->images[0].size().height);
+        dx1[0] = zFar_w[0].m[4] - zFar_w[0].m[0];
+        dx1[1] = zFar_w[0].m[5] - zFar_w[0].m[1];
+        dx1[2] = zFar_w[0].m[6] - zFar_w[0].m[2];
+        dy1[0] = zFar_w[0].m[8] - zFar_w[0].m[4];
+        dy1[1] = zFar_w[0].m[9] - zFar_w[0].m[5];
+        dy1[2] = zFar_w[0].m[10]- zFar_w[0].m[6];
+
+        dx0[0] = zNear_w[0].m[4] - zNear_w[0].m[0];
+        dx0[1] = zNear_w[0].m[5] - zNear_w[0].m[1];
+        dx0[2] = zNear_w[0].m[6] - zNear_w[0].m[2];
+        dy0[0] = zNear_w[0].m[8] - zNear_w[0].m[4];
+        dy0[1] = zNear_w[0].m[9] - zNear_w[0].m[5];
+        dy0[2] = zNear_w[0].m[10]- zNear_w[0].m[6];
+
+        x1[0] =  zFar_w[0].m[0];
+        x1[1] =  zFar_w[0].m[1];
+        x1[2] =  zFar_w[0].m[2];
+
+        x0[0] =  zNear_w[0].m[0];
+        x0[1] =  zNear_w[0].m[1];
+        x0[2] =  zNear_w[0].m[2];
+
+        double l1_p0[3],l1_p1[3];
+        for(int j=0;j<3;++j){
+            l1_p0[j] = x0[j] + dx0[j]*a + dy0[j]*b;
+            l1_p1[j] = x1[j] + dx1[j]*a + dy1[j]*b;
+        }
+        double l2_min = 1e10;
+        double nearest[3];
+
+        for (int i=0; i<c->imagePoints[1].size();i+=1){
+            a=c->imagePoints[1][i].x*1.0/c->images[1].size().width;
+            b=1.0-(c->imagePoints[1][i].y*1.0/c->images[1].size().height);
+            dx1[0] = zFar_w[1].m[4] - zFar_w[1].m[0];
+            dx1[1] = zFar_w[1].m[5] - zFar_w[1].m[1];
+            dx1[2] = zFar_w[1].m[6] - zFar_w[1].m[2];
+            dy1[0] = zFar_w[1].m[8] - zFar_w[1].m[4];
+            dy1[1] = zFar_w[1].m[9] - zFar_w[1].m[5];
+            dy1[2] = zFar_w[1].m[10]- zFar_w[1].m[6];
+
+            dx0[0] = zNear_w[1].m[4] - zNear_w[1].m[0];
+            dx0[1] = zNear_w[1].m[5] - zNear_w[1].m[1];
+            dx0[2] = zNear_w[1].m[6] - zNear_w[1].m[2];
+            dy0[0] = zNear_w[1].m[8] - zNear_w[1].m[4];
+            dy0[1] = zNear_w[1].m[9] - zNear_w[1].m[5];
+            dy0[2] = zNear_w[1].m[10]- zNear_w[1].m[6];
+
+            x1[0] =  zFar_w[1].m[0];
+            x1[1] =  zFar_w[1].m[1];
+            x1[2] =  zFar_w[1].m[2];
+
+            x0[0] =  zNear_w[1].m[0];
+            x0[1] =  zNear_w[1].m[1];
+            x0[2] =  zNear_w[1].m[2];
+
+            double l2_p0[3],l2_p1[3];
+            for(int j=0;j<3;++j){
+                l2_p0[j] = x0[j] + dx0[j]*a + dy0[j]*b;
+                l2_p1[j] = x1[j] + dx1[j]*a + dy1[j]*b;
+            }
+            double ne[3];
+            double l2 = findNearestPoint(l1_p0,l1_p1,l2_p0,l2_p1,ne);
+            if (l2<tres){
+                l2_min = l2;
+                nearest[0] = ne[0];
+                nearest[1] = ne[1];
+                nearest[2] = ne[2];
+                p_min_0_0.x=l1_p0[0];
+                p_min_0_0.y=l1_p0[1];
+                p_min_0_0.z=l1_p0[2];
+
+                p_min_0_1.x=l1_p1[0];
+                p_min_0_1.y=l1_p1[1];
+                p_min_0_1.z=l1_p1[2];
+
+                p_min_1_0.x=l2_p0[0];
+                p_min_1_0.y=l2_p0[1];
+                p_min_1_0.z=l2_p0[2];
+
+                p_min_1_1.x=l2_p1[0];
+                p_min_1_1.y=l2_p1[1];
+                p_min_1_1.z=l2_p1[2];
+
+                VEC3 pp;
+                pp.x = nearest[0];
+                pp.y = nearest[1];
+                pp.z = nearest[2];
+                points.push_back(pp);
+                p0_0.push_back(p_min_0_0);
+                p0_1.push_back(p_min_0_1);
+
+                p1_0.push_back(p_min_1_0);
+                p1_1.push_back(p_min_1_1);
+            }
+
+        }
+
+    }
+
+     glPointSize(7);
+    glColor3f(1,0,1);
+    glBegin(GL_POINTS);
+    for (int i=0; i<points.size(); ++i)
+    glVertex3f(points[i].x,points[i].y,points[i].z);
+    glEnd();
+
+    glBegin(GL_LINES);
+    for (int i=0; i<points.size(); ++i){
+        glColor3f(0,0.5,0);
+    glVertex3f(p0_0[i].x, p0_0[i].y, p0_0[i].z);
+    glVertex3f(p0_1[i].x, p0_1[i].y, p0_1[i].z);
+    glColor3f(0.5,0.5,0.5);
+    glVertex3f(p1_0[i].x, p1_0[i].y, p1_0[i].z);
+    glVertex3f(p1_1[i].x, p1_1[i].y, p1_1[i].z);
+    }
+    glEnd();
+
     glEnable(GL_DEPTH_TEST);
 
 
