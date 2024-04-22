@@ -17,9 +17,13 @@ float t_z=-2.4;
 float sc =1.0;
 int mode =0;
 int screen_num =0;
+
+int counter=0;
+double tres = 0.00001;
 void kb(unsigned char key, int x, int y){ //keyboard event
     if (key==' '){
      printf("key pressed \n");
+     evolve_tracers(vort,tracers,0.001);
     }
 
     if (key=='P'){
@@ -40,6 +44,30 @@ void kb(unsigned char key, int x, int y){ //keyboard event
      glOrtho(w_x0, w_x1, W_HEIGHT*w_y0/W_WIDTH,W_HEIGHT*w_y1/W_WIDTH, -10.0, 10.0);
      glMatrixMode (GL_MODELVIEW);
     }
+
+
+    if(key=='.'){
+        counter++;
+        if (counter>=19) counter = 18;
+    }
+
+    if(key==','){
+        counter--;
+        if (counter<0) counter = 0;
+    }
+
+
+    if(key==']'){
+        tres*=2.0;
+        printf("treshold = %e \n",tres);
+    }
+
+    if(key=='['){
+        tres*=0.5;
+        printf("treshold = %e \n",tres);
+    }
+
+
 
     if(key=='q'){
         t_z-=0.01;

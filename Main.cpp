@@ -9,13 +9,9 @@
 
 char dir[1024];
 int main(int argc, char** argv){
-   //  calc_radials();
-
     char fname[1024];
     sprintf(dir,"%s",__FILE__);
     dir[strlen(dir)-9]=0; //hack to get source directory
-
-
-
+    printf("Program started, sorce dir is %s \n fname id %s \n", dir,fname);
     GUI_init(argc,argv);
 }
